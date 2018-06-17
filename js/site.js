@@ -52,6 +52,21 @@ $(document).ready(() => {
 			console.log("Erro: "+msg);
 		});
 	});
+
+	// AO CLICAR EM SELECIONAR ARQUIVO
+	$(document).on('click', '#selecionarArquivo', () => {
+		// CHAMA O PROGRAMA PARA REALIZAR A IMPORTAÇÃO
+		$.ajax({
+			async : false,
+			method: "POST",
+			dataType : "json",
+			url: "conexao/importaPlanilha.php",
+		}).done((jsonDados) => {
+			console.log(jsonDados);
+		}).fail((jqXHR, msg) => {
+			console.log("Erro: "+msg);
+		});
+	});
 });
 
 // FUNÇÃO RESPONSAVEL POR BUSCA O PROGRAMA DA TELA

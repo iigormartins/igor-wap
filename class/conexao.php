@@ -40,8 +40,11 @@
 			return $stringCondicao;
 		}
 
-		## REALIZA A BUSCA NO BANCO DE DADOS RECEBIDO PELA CONEXAO
+		## REALIZA A BUSCA NO BANCO DE DADOS
 		public function pesquisar($tabela, $campos, $condicao, $debug = false){
+			## VARIAVEL TABELA É OBRIGATORIO
+			if($tabela == null) return false;
+
 			$return = null;
 
 			##MONTA A QUERY
@@ -52,15 +55,47 @@
 			## DEBUG, IMPRIME A QUERY
 			if($debug == true) echo $query;
 
-			## EXECUTA A QUERY			
-			$resultado = $this->conexaoDB->query($query);
+			## EXECUTA A QUERY
+			try{			
+				$resultado = $this->conexaoDB->query($query);
 
-			if($resultado->num_rows > 0){
-				while($row = $resultado->fetch_assoc())
-					$return[] = $row;
-			}
+				if($resultado->num_rows > 0){
+					while($row = $resultado->fetch_assoc())
+						$return[] = $row;
+				}
+			}catch(Exception $e){
+				$return = false;
+			}	
 
 			return $return;        	        
+	    }
+
+	    ## REALIZA O CADASTRO DO DADO NO BANCO DE DADOS
+	    public function cadastrar($tabela, $campos, $valor, $debug = false){
+	    	## VARIAVEIS TABELA, CAMPOS, VALOR É OBRIGATORIO
+	    	if($tabela == false || $campos == false || $valor == false) return false;
+
+	    	$return = true;
+
+	    	##MONTA QUERY
+	    	$query = "INSERT ".$tabela." (".$this->campos($campos).")";
+
+	    	$stringValor = "";
+	    	foreach ($valor as $key => $value) {
+	    		$stringValor .= "'".$value."',";
+	    	}
+	    	$stringValor = substr($stringValor, 0, -1);
+
+	    	$query .= " VALUES (".$stringValor.")";
+
+	    	##EXECUTA QUERY
+	    	try{
+	    		mysqli_query($this->conexaoDB,$query);
+	    	}catch(Exception $e){
+	    		$return = false;
+	    	}
+
+	    	return $return;
 	    }
 	}
 ?>
