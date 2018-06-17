@@ -1,0 +1,13 @@
+{
+    "name": "igor/mundowap",
+    "description": "Processo Seletivo",
+    "authors": [
+        {
+            "name": "Igor Junio",
+            "email": "iigor.junio@gmail.com"
+        }
+    ],
+    "require": {
+    	"php": ">=5.3.3"
+    }
+}

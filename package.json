@@ -1,0 +1,23 @@
+{
+  "name": "mundowap",
+  "version": "1.0.0",
+  "description": "Processo Seletivo",
+  "main": "site.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/iigormartins/igor-wap.git"
+  },
+  "author": "Igor Junio",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/iigormartins/igor-wap/issues"
+  },
+  "homepage": "https://github.com/iigormartins/igor-wap#readme",
+  "dependencies": {
+    "bootstrap": "^4.1.1",
+    "jquery": "^3.3.1"
+  }
+}
