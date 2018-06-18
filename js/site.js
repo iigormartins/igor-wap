@@ -58,19 +58,49 @@ $(document).ready(() => {
 	});
 
 	// AO CLICAR EM SELECIONAR ARQUIVO
-	$(document).on('click', '#selecionarArquivo', () => {
-		// CHAMA O PROGRAMA PARA REALIZAR A IMPORTAÇÃO
-		$.ajax({
-			async : false,
-			method: "POST",
-			dataType : "json",
-			url: "conexao/importaPlanilha.php",
-		}).done((jsonDados) => {
-			buscaDados();
-		}).fail((jqXHR, msg) => {
-			console.log("Erro: "+msg);
-		});
-	});
+	var form;
+    $(document).on('change', '#arquivo',(event) => {
+        form = new FormData();
+        form.append('arquivo', event.target.files[0]);
+    });
+
+    $(document).on('click', '#enviarArquivo', () => {
+    	if(form != null && form != "" && form != undefined){
+	        $.ajax({
+	            url: 'conexao/importaPlanilha.php',
+	            data: form,
+	            processData: false,
+	            contentType: false,
+	            type: 'POST',
+	            success: function (data) {
+	            	$('<p>'+data+'</p>').dialog({
+						height : 170,
+						buttons: [
+					    {
+					      text: "OK",
+					      click: function() {
+					        $( this ).dialog( "close" );
+					      }
+					    }
+					  ]
+					});
+	                buscaDados();
+	            }
+	        });
+	    }else{
+	    	$('<p>Favor selecionar o arquivo que deseja importar!</p>').dialog({
+				height : 200,
+				buttons: [
+			    {
+			      text: "OK",
+			      click: function() {
+			        $( this ).dialog( "close" );
+			      }
+			    }
+			  ]
+			});
+	    }
+    });
 
 	$(document).on('click', '.btn-danger',(event) => {
 		var name = event.target.attributes[3].value;
@@ -133,6 +163,8 @@ function buscaDados(){
 
 				$('#itens').append(string);
 			}
+		}else{
+			$('#itens').empty();
 		}
 	}).fail((jqXHR, msg) => {
 		console.log("Erro: "+msg);

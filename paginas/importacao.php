@@ -3,6 +3,7 @@
 	include_once '../redirect.php'; 
 ?>
 
+
 <div class="card text-center" style="height: 100%;">
  	<div class="card-header" style="background-color: #007bff; color: white;">
     	<b>Upload do Arquivo</b>
@@ -10,10 +11,10 @@
   	<div class="card-body">
   		<div class="container">
   			<div class="row">
-  				<div class="col-2">
-  					<input type="button" id="selecionarArquivo" class="btn btn-secondary" value="Selecione o Arquivo">
-  				</div>
-  				<div class="col-8"></div>
+  				<div class="col-10" style="text-align: left;">
+            <input type="file" id="arquivo" name="arquivo" />
+            <button id="enviarArquivo">Enviar</button>   
+          </div>
   				<div class="col-2">
   					<input type="button" id="logout" class="btn btn-primary" value="Logout">
   				</div>

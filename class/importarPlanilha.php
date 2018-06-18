@@ -4,23 +4,13 @@
 	include_once 'conexao.php';
 
 	class importarPlanilha{
-		// Atributo recebe a instância da conexão PDO
+		## VARIAVEL QUE IRA RECEBER A CONEXAO COM O BANDO DE DADOS
 		private $conexao  = null;
 	 
-	     // Atributo recebe uma instância da classe SimpleXLSX
+	    ## VARIAVEL QUE IRA RECEBER A INSTANCIA DA CLASSE SimpleXLSX
 		private $planilha = null;
-	 
-		// Atributo recebe a quantidade de linhas da planilha
-		private $linhas   = null;
-	 
-		// Atributo recebe a quantidade de colunas da planilha
-		private $colunas  = null;
-	 
-		/*
-		 * Método Construtor da classe
-		 * @param $path - Caminho e nome da planilha do Excel xlsx
-		 * @param $conexao - Instância da conexão PDO
-		 */
+	 	 
+		## RECEBE O CAMINHO DA PLANILHA E MONTA A CONEXAO
 		public function __construct($path=null){
 			if(!empty($path) && file_exists($path)){
 				$this->planilha = SimpleXLSX::parse($path);
@@ -32,28 +22,10 @@
 			if($this->conexao == null) 
 				$this->conexao = new conexao();
 		}
-	 
-		/*
-		 * Método que retorna o valor do atributo $linhas
-		 * @return Valor inteiro contendo a quantidade de linhas na planilha
-		 */
-		public function getQtdeLinhas(){
-			return $this->linhas;
-		}
-	 
-		/*
-		 * Método que retorna o valor do atributo $colunas
-		 * @return Valor inteiro contendo a quantidade de colunas na planilha
-		 */
-		public function getQtdeColunas(){
-			return $this->colunas;
-		}
-	 
-		/*
-		 * Método que verifica se o registro CPF da planilha já existe na tabela cliente
-		 * @param $cpf - CPF do cliente que está sendo lido na planilha
-		 * @return Valor Booleano TRUE para duplicado e FALSE caso não 
-		 */
+
+		## VERIFICA SE O CODIGO INFORMADO (CHAVE PRIMARIA)
+		## JA FOI ADICIONADO A TABELA, POIS NÃO TEM COMO HAVER
+		## REGISTROS COM O MESMO CODIGO
 		private function isRegistroDuplicado($codigo){
 			$retorno = false;
 	 
@@ -74,10 +46,8 @@
 			return $retorno;
 		}
 	 
-		/*
-		 * Método para ler os dados da planilha e inserir no banco de dados
-		 * @return Valor Inteiro contendo a quantidade de linhas importadas
-		 */
+		## PERCORRER OS DADOS IMPORTADOS DA TABELA E INSERE NO BANCO DE DADOS
+		## VALIDA O CABEÇALHO DO ARQUIVO QUE SERA IMPORTADO
 		public function insertDados(){
 	 		
 			try{
