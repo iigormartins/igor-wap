@@ -97,6 +97,31 @@
 
 	    	return $return;
 	    }
+
+	    ## REALIZA A REMOÇAO DO DADO NO BANCO DE DADOS
+	    public function remover($tabela, $condicao, $debug = false){
+	    	## VARIAVEL TABELA É OBRIGATORIO
+			if($tabela == null) return false;
+
+			$return = true;
+
+			## MONTA A QUERY
+			$query = "DELETE FROM ".$tabela;
+
+			if($condicao != null && $condicao != "") $query.= " WHERE ".$this->condicao($condicao);
+
+			## DEBUG, IMPRIME A QUERY
+			if($debug == true) echo $query;
+
+			## EXECUTA QUERY
+	    	try{
+	    		mysqli_query($this->conexaoDB,$query);
+	    	}catch(Exception $e){
+	    		$return = false;
+	    	}
+
+	    	return $return;
+	    }
 	}
 ?>
 	

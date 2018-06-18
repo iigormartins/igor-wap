@@ -21,13 +21,13 @@
 
   			<!-- TABELA -->
   			<div class="row" style="margin-top: 20px;">
-  				<table class="table table-bordered">
+  				<table class="table table-bordered" style="font-family: monospace;">
   					<thead>
-  						<th style="text-align: center;">AÇÃO</th>
-  						<th style="text-align: center;">EAN</th>
-  						<th>NOME PRODUTO</th>
-  						<th style="text-align: center;">PREÇO</th>
-  						<th style="text-align: center;">ESTOQUE</th>
+  						<th style="text-align: center;" width="110px">AÇÃO</th>
+  						<th style="text-align: center;" width="120px">EAN</th>
+  						<th width="570px">NOME PRODUTO</th>
+  						<th style="text-align: center;" width="100px">PREÇO</th>
+  						<th style="text-align: center;" width="100px">ESTOQUE</th>
   						<th>DATA FABRICAÇÃO</th>
   					</thead>
   					<tbody id="itens">

@@ -5,7 +5,7 @@ $(document).ready(() => {
 	$('#telaAtual').val('login');
 
 	// AO CLICAR EM LOGIN
-	$(document).on('click', '#formLogin #login', ()=>{
+	$(document).on('click', '#formLogin #login', () => {
 		if($('#formLogin #T1001_Email').val() == ""){
 			return false;
 		}
@@ -29,6 +29,10 @@ $(document).ready(() => {
 				buscaTela('importacao');
 				$('#telaAtual').val('importacao');
 				$('#alerta').css('display', 'none');
+
+				// QUANDO ENTRAR NA TELA DE IMPORTAÇÃO IRA CONSULTAR E PREENCHER
+				// A TELA COM OS REGISTROS ENCONTRADO NO BANCO 
+				buscaDados();
 			}else{
 				$('#alerta').css('display', 'block');
 			}
@@ -62,11 +66,35 @@ $(document).ready(() => {
 			dataType : "json",
 			url: "conexao/importaPlanilha.php",
 		}).done((jsonDados) => {
-			console.log(jsonDados);
+			buscaDados();
 		}).fail((jqXHR, msg) => {
 			console.log("Erro: "+msg);
 		});
 	});
+
+	$(document).on('click', '.btn-danger',(event) => {
+		var name = event.target.attributes[3].value;
+		var linha = "dado"+name.substring(5,6);
+		var ean = $('#'+linha).text();
+		
+		// IRE REMOVER O ELEMENTO DO BANCO DE DADOS
+		$.ajax({
+			async : false,
+			method: "POST",
+			dataType : "json",
+			url: "conexao/removeDado.php",
+			data :{
+				Ean : ean
+			}
+		}).done((jsonDados) => {
+			if(jsonDados == true){
+				buscaDados();
+			}
+		}).fail((jqXHR, msg) => {
+			console.log("Erro: "+msg);
+		});
+	});
+
 });
 
 // FUNÇÃO RESPONSAVEL POR BUSCA O PROGRAMA DA TELA
@@ -79,6 +107,33 @@ function buscaTela(nomeTela){
 	}).done((jsonDados) => {
 		$('#tela').empty();
 		$('#tela').append(jsonDados);
+	}).fail((jqXHR, msg) => {
+		console.log("Erro: "+msg);
+	});
+}
+
+function buscaDados(){
+	$.ajax({
+		async : false,
+		method: "POST",
+		dataType : "json",
+		url: "conexao/buscaDadosImportados.php"
+	}).done((jsonDados) => {
+		if(jsonDados != null){
+			$('#itens').empty();
+			for(var i=0;i<jsonDados.length; i++){
+				var dado = jsonDados[i].split('|');
+				var string = "";
+				string += "<tr><th style='font-size: 7px'><button type='button' class='btn btn-danger' style='padding: 0px 10px;' id='linha"+i+"' name='linha"+i+"'>Remover</button></th>";
+				string +="<th style='text-align: center;' id='dado"+i+"'>"+dado[0]+"</th>";
+				string +="<th>"+dado[1]+"</th>";
+				string +="<th style='text-align: center;'>R$ "+dado[2]+"</th>";
+				string +="<th style='text-align: center;'>"+dado[3]+"</th>";
+				string +="<th style='text-align: center;'>"+dado[4]+"</th></tr>";
+
+				$('#itens').append(string);
+			}
+		}
 	}).fail((jqXHR, msg) => {
 		console.log("Erro: "+msg);
 	});
