@@ -49,7 +49,7 @@
 		## PERCORRER OS DADOS IMPORTADOS DA TABELA E INSERE NO BANCO DE DADOS
 		## VALIDA O CABEÇALHO DO ARQUIVO QUE SERA IMPORTADO
 		public function insertDados(){
-	 		
+	 		$insere = true;
 			try{
 				$campos = array();
 				$campos[] = 'T1002_Ean';
@@ -57,31 +57,44 @@
 				$campos[] = 'T1002_Preco';
 				$campos[] = 'T1002_Estoque';
 				$campos[] = 'T1002_Data_Fabricacao';
+
+				$valores = array();
 				
 				$linhas = $this->planilha->rows();
 				$total = 0;
 				foreach($linhas as $linha => $dados){
 					## PRIMEIRA LINHA CABEÇALHO, VERIRICO SE ESTA OKAY
 					if($linha == 0){
-						if(!ctype_upper($dados[0]) && $dados[0] != "EAN") return false;
-						if(!ctype_upper($dados[1]) && $dados[1] != "NOME PRODUTO") return false;
-						if(!ctype_upper($dados[2]) && $dados[2] != "PREÇO") return false;
-						if(!ctype_upper($dados[3]) && $dados[3] != "ESTOQUE") return false;
-						if(!ctype_upper($dados[4]) && $dados[4] != "DATA FABRICAÇÃO") return false;
+						if(!ctype_upper($dados[0]) && $dados[0] != "EAN") $insere = false;
+						if(!ctype_upper($dados[1]) && $dados[1] != "NOME PRODUTO") $insere = false;
+						if(!ctype_upper($dados[2]) && $dados[2] != "PREÇO") $insere = false;
+						if(!ctype_upper($dados[3]) && $dados[3] != "ESTOQUE") $insere = false;
+						if(!ctype_upper($dados[4]) && $dados[4] != "DATA FABRICAÇÃO") $insere = false;
 					}else if ($linha >= 1 && !$this->isRegistroDuplicado($dados[0]) && $dados[0] != ''){
-						$valor 	 = array();		
+						$valor 	 = array();
+						if($dados[0] == '') $insere = false;		
 						$valor[] = trim($dados[0]);
+						if($dados[1] == '') $insere = false;	
 						$valor[] = trim($dados[1]);
+						if($dados[2] == '') $insere = false;	
 						$valor[] = trim($dados[2]);
+						if($dados[3] == '') $insere = false;	
 						$valor[] = trim($dados[3]);
-						$valor[] = substr(trim($dados[4]),0,10);
-						$retorno = $this->conexao->cadastrar('tab01002', $campos, $valor);
-
-						if($retorno == true) $total++;
+						if(substr(trim($dados[4]),0,10) == '1970-01-01') $valor[] = '';
+						else $valor[] = substr(trim($dados[4]),0,10);
+						$valores[] = $valor;
 					}
 				}
-	 
-				return $total;
+				if($insere == true){
+					foreach ($valores as $key => $value) {
+						$retorno = $this->conexao->cadastrar('tab01002', $campos, $value);
+
+						if($retorno == true) $total++;
+					}	 
+					return $total;
+				}else{
+					return '#erro';
+				}
 			}catch(Exception $erro){
 				echo 'Erro: ' . $erro->getMessage();
 			}	 

@@ -74,7 +74,7 @@ $(document).ready(() => {
 	            type: 'POST',
 	            success: function (data) {
 	            	$('<p>'+data+'</p>').dialog({
-						height : 170,
+						height : 200,
 						buttons: [
 					    {
 					      text: "OK",

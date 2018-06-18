@@ -49,7 +49,7 @@
 
 		$linhasImportadas = $planilha->insertDados();
 
-		if($linhasImportadas === false){
+		if($linhasImportadas === false || $linhasImportadas == "#erro"){
 			echo "Não foi possível importar o arquivo, tente novamente!";
 		}else{
 			echo "Arquivo Importado com sucesso!";
